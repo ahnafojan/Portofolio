@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity";
 import { SanityImage } from "@/lib/types";
@@ -24,37 +24,9 @@ function getImageAspectRatio(image: SanityImage) {
 export default function ProjectImageCarousel({ images, title }: ProjectImageCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
-  const frameRef = useRef<HTMLDivElement>(null);
   const hasMultiple = images.length > 1;
   const ratios = useMemo(() => images.map((image) => getImageAspectRatio(image)), [images]);
   const activeRatio = ratios[activeIndex] ?? 16 / 9;
-  const [frameWidth, setFrameWidth] = useState(0);
-  const dynamicHeight = frameWidth > 0 ? frameWidth / activeRatio : 0;
-
-  useEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return;
-
-    const update = () => {
-      setFrameWidth(frame.clientWidth);
-    };
-
-    update();
-
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (!entry) return;
-      setFrameWidth(entry.contentRect.width);
-    });
-
-    observer.observe(frame);
-    window.addEventListener("orientationchange", update);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("orientationchange", update);
-    };
-  }, []);
 
   const prev = () => {
     setActiveIndex((current) => (current - 1 + images.length) % images.length);
@@ -66,18 +38,8 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
 
   return (
     <div
-      ref={frameRef}
-      className="relative w-full overflow-hidden"
-      style={{
-        ...(dynamicHeight > 0
-          ? {
-              height: `${dynamicHeight}px`,
-              transition: "height 420ms cubic-bezier(0.16,1,0.3,1)",
-            }
-          : {
-              aspectRatio: `${activeRatio}`,
-            }),
-      }}
+      className="relative w-full overflow-hidden bg-nb-surface"
+      style={{ aspectRatio: activeRatio }}
       onTouchStart={(event) => {
         touchStartX.current = event.touches[0]?.clientX ?? null;
       }}
@@ -95,22 +57,22 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
       }}
     >
       <div
-        className="flex h-full w-full transition-transform duration-500 ease-out"
+        className="flex h-full w-full transition-transform duration-150 ease-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {images.map((image, index) => (
           <div
             key={image.asset?._ref ?? `${title}-${index}`}
-            className="relative h-full w-full shrink-0 bg-[#07070f]"
+            className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface"
           >
             <Image
-              src={urlFor(image).auto("format").fit("max").width(1600).url()}
+              src={urlFor(image).auto("format").fit("max").width(1600).height(900).url()}
               alt={`${title} preview ${index + 1}`}
-              fill
-              className="object-contain p-2 sm:p-3"
+              width={1600}
+              height={900}
+              loading="lazy"
+              className="h-full w-full object-contain p-2 sm:p-3"
               sizes="(max-width: 768px) 100vw, 1200px"
-              unoptimized
-              priority={index === 0}
             />
           </div>
         ))}
@@ -122,44 +84,18 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
             type="button"
             aria-label="Previous image"
             onClick={prev}
-            className="absolute left-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full"
-            style={{
-              color: "#ede9fe",
-              background: "rgba(0,0,0,0.58)",
-              border: "1px solid rgba(255,255,255,0.16)",
-            }}
+            className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M15 6L9 12L15 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            &lt;
           </button>
 
           <button
             type="button"
             aria-label="Next image"
             onClick={next}
-            className="absolute right-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full"
-            style={{
-              color: "#ede9fe",
-              background: "rgba(0,0,0,0.58)",
-              border: "1px solid rgba(255,255,255,0.16)",
-            }}
+            className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M9 6L15 12L9 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            &gt;
           </button>
 
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
@@ -169,10 +105,10 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
                 type="button"
                 aria-label={`Go to image ${index + 1}`}
                 onClick={() => setActiveIndex(index)}
-                className="h-1.5 rounded-full transition-all duration-300"
+                className="h-3 border-2 border-nb-border bg-nb-surface transition-all duration-150"
                 style={{
-                  width: activeIndex === index ? "18px" : "8px",
-                  background: activeIndex === index ? "#a78bfa" : "rgba(255,255,255,0.35)",
+                  width: activeIndex === index ? "24px" : "12px",
+                  background: activeIndex === index ? "#FFD447" : "#FFFFFF",
                 }}
               />
             ))}

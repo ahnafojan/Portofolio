@@ -19,10 +19,10 @@ export default async function StudioPage() {
 
   if (!projectId || !dataset) {
     return (
-      <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#080808", color: "white", padding: "24px" }}>
-        <div style={{ maxWidth: "640px", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "16px", padding: "20px", background: "rgba(255,255,255,0.03)" }}>
-          <h1 style={{ margin: "0 0 10px 0", fontSize: "18px" }}>Sanity Studio belum terkonfigurasi</h1>
-          <p style={{ margin: 0, opacity: 0.8, lineHeight: 1.6 }}>
+      <main className="grid min-h-screen place-items-center bg-nb-bg p-6 text-nb-text">
+        <div className="max-w-2xl border-2 border-nb-border bg-nb-surface p-5 shadow-hard">
+          <h1 className="mb-2.5 text-lg font-black">Sanity Studio belum terkonfigurasi</h1>
+          <p className="m-0 leading-relaxed text-nb-muted">
             Tambahkan <code>NEXT_PUBLIC_SANITY_PROJECT_ID</code> dan <code>NEXT_PUBLIC_SANITY_DATASET</code> di Vercel Project Settings - Environment Variables, lalu redeploy.
           </p>
         </div>

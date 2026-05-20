@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+import type { Metadata } from "next";
 import { client, hasSanityConfig } from "@/lib/sanity";
 import {
   profileQuery,
@@ -15,35 +17,55 @@ import {
   Certificate,
   Organization,
 } from "@/lib/types";
-
 import Hero from "@/components/sections/Hero";
-import FeaturedProjects from "@/components/sections/FeaturedProjects";
-import Skills from "@/components/sections/Skills";
-import Experience from "@/components/sections/Experience";
-import Organizations from "@/components/sections/Organizations";
-import Certificates from "@/components/sections/Certificates";
-import Contact from "@/components/sections/Contact";
-import TopNavbar from "@/components/TopNavbar";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import Card from "@/components/ui/Card";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Portfolio",
+  description: "Personal portfolio",
+};
+
+const loadingFallback = () => (
+  <div className="bg-nb-bg py-12">
+    <div className="nb-container">
+      <div className="border-2 border-nb-border bg-nb-surface p-4 font-mono text-sm font-bold text-nb-muted shadow-hard">
+      ...
+      </div>
+    </div>
+  </div>
+);
+
+const About = dynamic(() => import("@/components/sections/About"), { loading: loadingFallback });
+const Experience = dynamic(() => import("@/components/sections/Experience"), { loading: loadingFallback });
+const OrganizationSection = dynamic(() => import("@/components/sections/Organization"), { loading: loadingFallback });
+const Projects = dynamic(() => import("@/components/sections/Projects"), { loading: loadingFallback });
+const Skills = dynamic(() => import("@/components/sections/Skills"), { loading: loadingFallback });
+const Certificates = dynamic(() => import("@/components/sections/Certificates"), { loading: loadingFallback });
+const Contact = dynamic(() => import("@/components/sections/Contact"), { loading: loadingFallback });
 
 export default async function Home() {
   if (!hasSanityConfig || !client) {
     return (
-      <main className="min-h-screen bg-[#080808] text-white">
-        <TopNavbar />
-        <section className="mx-auto max-w-6xl px-6 pt-28">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-zinc-300">
-            Data Sanity belum aktif di environment ini. Set
-            {" "}<code className="text-violet-300">NEXT_PUBLIC_SANITY_PROJECT_ID</code> dan{" "}
-            <code className="text-violet-300">NEXT_PUBLIC_SANITY_DATASET</code> di Vercel, lalu redeploy.
-          </div>
+      <main className="min-h-screen bg-nb-bg text-nb-text">
+        <Navbar />
+        <section className="nb-container py-12">
+          <Card>
+            Data Sanity belum aktif di environment ini. Set{" "}
+            <code className="font-mono font-bold text-nb-blue">NEXT_PUBLIC_SANITY_PROJECT_ID</code> dan{" "}
+            <code className="font-mono font-bold text-nb-blue">NEXT_PUBLIC_SANITY_DATASET</code> di Vercel,
+            lalu redeploy.
+          </Card>
         </section>
-        <FeaturedProjects projects={[]} />
+        <Projects projects={[]} />
         <Skills skills={[]} />
         <Experience experiences={[]} />
-        <Organizations items={[]} />
+        <OrganizationSection items={[]} />
         <Certificates items={[]} />
+        <Footer />
       </main>
     );
   }
@@ -65,17 +87,17 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="min-h-screen bg-[#080808] text-white">
-      <TopNavbar />
+    <main className="min-h-screen bg-nb-bg text-nb-text">
+      <Navbar />
       {profile ? <Hero profile={profile} skills={skills ?? []} /> : null}
-      <FeaturedProjects projects={featuredProjects ?? []} />
-      <Skills skills={skills ?? []} />
+      {profile ? <About profile={profile} skills={skills ?? []} /> : null}
       <Experience experiences={experiences ?? []} />
-
-      <Organizations items={organizations ?? []} />
+      <OrganizationSection items={organizations ?? []} />
+      <Projects projects={featuredProjects ?? []} />
+      <Skills skills={skills ?? []} />
       <Certificates items={certificates ?? []} />
-
       {profile ? <Contact profile={profile} /> : null}
+      <Footer fullName={profile?.fullName} />
     </main>
   );
 }
