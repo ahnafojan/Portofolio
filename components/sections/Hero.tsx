@@ -6,6 +6,7 @@ import Card from "@/components/ui/Card";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { urlFor } from "@/lib/sanity";
 import { Profile, Skill } from "@/lib/types";
+import { splitName } from "@/lib/utils";
 
 const FALLBACK_SKILLS: Skill[] = [
   { _id: "hero-skill-1", name: "Next.js", level: 5, category: "Frontend" },
@@ -35,6 +36,7 @@ interface HeroProps {
 
 export default function Hero({ profile, skills = [] }: HeroProps) {
   const fullName = profile?.fullName?.trim() || "Your Name";
+  const { first, last } = splitName(fullName);
   const headline = profile?.headline || "Full Stack Developer";
   const aboutText =
     profile?.about ||
@@ -79,10 +81,11 @@ export default function Hero({ profile, skills = [] }: HeroProps) {
             </p>
           </div>
 
-          <h1 className="break-words font-heading text-[clamp(36px,10vw,52px)] font-black leading-none text-nb-text md:nb-h1">
-            <span className="relative inline-block after:absolute after:bottom-1 after:left-0 after:-z-10 after:h-4 after:w-full after:bg-nb-yellow">
-              {fullName}
-            </span>
+          <h1 className="mb-2 break-words font-heading text-[clamp(40px,7vw,68px)] leading-none text-[#111111]">
+            {first ? (
+              <span className="font-light tracking-tight text-[#111111]">{first} </span>
+            ) : null}
+            <span className="font-black tracking-tighter text-[#111111]">{last}</span>
           </h1>
 
           <p className="mt-4 max-w-2xl text-base font-semibold leading-snug text-nb-text md:mt-6 md:text-xl lg:text-2xl">

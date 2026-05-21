@@ -245,7 +245,7 @@ export default function Navbar() {
             className="font-heading text-xl font-black text-[#FFD447] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow"
             onClick={(event) => handleNavClick("home", "#home", event)}
           >
-            Portfolio
+            Choose one!
           </a>
 
           <button
