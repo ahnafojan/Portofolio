@@ -40,15 +40,14 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 const baseClass =
-  "inline-flex min-h-11 min-w-11 items-center justify-center gap-2 nb-border font-bold uppercase tracking-[0.03em] transition-[transform,box-shadow] duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow disabled:pointer-events-none disabled:opacity-40 disabled:shadow-hard";
+  "inline-flex min-h-11 min-w-11 items-center justify-center gap-2 nb-border font-bold uppercase tracking-[0.03em] transition-[transform,box-shadow] duration-150 ease-out will-change-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow disabled:pointer-events-none disabled:opacity-40 disabled:shadow-hard";
 
 function classNames(variant: ButtonVariant, size: ButtonSize, className?: string) {
   return cn(
     baseClass,
     sizes[size],
     variants[variant],
-    "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg active:translate-x-0.5 active:translate-y-0.5 active:[box-shadow:2px_2px_0px_#111111]",
-    variant === "dark" && "active:[box-shadow:2px_2px_0px_#FFD447]",
+    "hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
     className,
   );
 }

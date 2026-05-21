@@ -39,7 +39,7 @@ function SocialLink({ href, label, icon }: { href: string; label: string; icon: 
       href={href}
       target={href.startsWith("mailto:") ? undefined : "_blank"}
       rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-      className="flex min-h-11 min-w-0 items-center gap-3 border-2 border-nb-border bg-nb-surface px-4 py-3 font-bold text-nb-text shadow-[3px_3px_0px_#111111] transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow"
+      className="flex min-h-11 min-w-0 items-center gap-3 border-2 border-nb-border bg-nb-surface px-4 py-3 font-bold text-nb-text shadow-[3px_3px_0px_#111111] transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
     >
       <span className="text-nb-blue">{icon}</span>
       <span className="min-w-0 break-words">{label}</span>
@@ -98,20 +98,20 @@ export default function Contact({ profile }: ContactProps) {
   const validate = (): boolean => {
     const nextErrors: FormErrors = {};
 
-    if (!form.from_name.trim()) nextErrors.from_name = "⚠ Nama wajib diisi";
+    if (!form.from_name.trim()) nextErrors.from_name = "Nama wajib diisi";
 
     if (!form.from_email.trim()) {
-      nextErrors.from_email = "⚠ Email wajib diisi";
+      nextErrors.from_email = "Email wajib diisi";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.from_email)) {
-      nextErrors.from_email = "⚠ Format email tidak valid";
+      nextErrors.from_email = "Format email tidak valid";
     }
 
-    if (!form.subject.trim()) nextErrors.subject = "⚠ Subjek wajib diisi";
+    if (!form.subject.trim()) nextErrors.subject = "Subjek wajib diisi";
 
     if (!form.message.trim()) {
-      nextErrors.message = "⚠ Pesan wajib diisi";
+      nextErrors.message = "Pesan wajib diisi";
     } else if (form.message.trim().length < 10) {
-      nextErrors.message = "⚠ Pesan minimal 10 karakter";
+      nextErrors.message = "Pesan minimal 10 karakter";
     }
 
     setErrors(nextErrors);
@@ -158,8 +158,8 @@ export default function Contact({ profile }: ContactProps) {
   const submitLabel = {
     idle: "KIRIM PESAN",
     loading: "MENGIRIM...",
-    success: "✓ PESAN TERKIRIM!",
-    error: "✕ GAGAL KIRIM — COBA LAGI",
+    success: "PESAN TERKIRIM!",
+    error: "GAGAL KIRIM - COBA LAGI",
   }[status];
 
   return (
@@ -195,12 +195,12 @@ export default function Contact({ profile }: ContactProps) {
             <form className="grid gap-4" onSubmit={handleSubmit} noValidate>
               {status === "success" ? (
                 <div className="border-2 border-nb-border bg-nb-green px-4 py-3 font-bold text-nb-text shadow-[3px_3px_0px_#111111]">
-                  ✓ Pesan berhasil dikirim! Saya akan membalas segera.
+                  Pesan berhasil dikirim! Saya akan membalas segera.
                 </div>
               ) : null}
               {status === "error" ? (
                 <div className="border-2 border-nb-border bg-nb-danger px-4 py-3 font-bold text-white shadow-[3px_3px_0px_#111111]">
-                  ✕ Gagal mengirim pesan. Cek koneksi dan coba lagi.
+                  Gagal mengirim pesan. Cek koneksi dan coba lagi.
                 </div>
               ) : null}
 
@@ -245,12 +245,12 @@ export default function Contact({ profile }: ContactProps) {
                 className={[
                   "inline-flex min-h-12 w-full items-center justify-center gap-2 border-2 border-[#111111] px-5 py-3 font-bold uppercase tracking-[0.03em] transition-[transform,box-shadow,background-color,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow",
                   status === "idle" &&
-                    "bg-[#FFD447] text-[#111111] shadow-[3px_3px_0_#111111] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_#111111]",
+                    "bg-[#FFD447] text-[#111111] shadow-[3px_3px_0_#111111] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
                   status === "loading" && "cursor-not-allowed bg-[#111111] text-[#FFD447]",
                   status === "success" &&
                     "cursor-not-allowed bg-[#6BCB77] text-[#111111] shadow-[3px_3px_0_#111111]",
                   status === "error" &&
-                    "bg-[#FF4D4D] text-white shadow-[3px_3px_0_#111111] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_#111111]",
+                    "bg-[#FF4D4D] text-white shadow-[3px_3px_0_#111111] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
                 ]
                   .filter(Boolean)
                   .join(" ")}

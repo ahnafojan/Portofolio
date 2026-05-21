@@ -35,10 +35,10 @@ export default function Navbar() {
   const { scrollDir, isAtTop } = useScrollDirection(closeMenuOnScrollDown);
   const brandClass = isAtTop ? "text-[#111111]" : "text-[#FFD447]";
   const contactButtonClass = isAtTop
-    ? "border-2 border-[#111111] bg-transparent text-[#111111] shadow-none hover:shadow-[3px_3px_0_#111111]"
-    : "border-2 border-[#111111] bg-[#FFD447] text-[#111111] shadow-[3px_3px_0_#111111] hover:shadow-[5px_5px_0_#111111]";
+    ? "border-2 border-[#111111] bg-transparent text-[#111111] shadow-[3px_3px_0_#111111] hover:shadow-none"
+    : "border-2 border-[#111111] bg-[#FFD447] text-[#111111] shadow-[3px_3px_0_#111111] hover:shadow-none";
   const menuContactButtonClass =
-    "border-2 border-[#111111] bg-[#FFD447] text-[#111111] shadow-[3px_3px_0px_#FFD447] hover:shadow-[5px_5px_0px_#FFD447]";
+    "border-2 border-[#111111] bg-[#FFD447] text-[#111111] shadow-[3px_3px_0px_#FFD447] hover:shadow-none";
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -185,7 +185,7 @@ export default function Navbar() {
           scrollDir === "down" && !isAtTop ? "-translate-y-full" : "translate-y-0",
           isAtTop
             ? "border-b-0 border-transparent bg-transparent shadow-none"
-            : "border-b-2 border-nb-yellow bg-[#111111] [box-shadow:0_4px_0px_#FFD447]",
+            : "border-b-0 border-transparent bg-[#111111] shadow-none",
         )}
       >
         <nav className="nb-container flex min-h-16 items-center justify-between gap-4 py-3 lg:py-4">
@@ -221,7 +221,7 @@ export default function Navbar() {
             aria-expanded={open}
             onClick={() => setOpen((current) => !current)}
             className={cn(
-              "inline-flex h-11 w-11 shrink-0 items-center justify-center border-2 bg-transparent shadow-none transition-[transform,box-shadow,color,border-color] duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-0.5 active:translate-y-0.5 active:[box-shadow:2px_2px_0px_#111111] lg:hidden",
+              "inline-flex h-11 w-11 shrink-0 items-center justify-center border-2 bg-transparent shadow-[3px_3px_0_#111111] transition-[transform,box-shadow,color,border-color] duration-150 ease-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none lg:hidden",
               isAtTop ? "border-[#111111] text-[#111111]" : "border-[#FFD447] text-white",
             )}
           >
@@ -252,7 +252,7 @@ export default function Navbar() {
             type="button"
             aria-label="Close menu"
             onClick={() => setOpen(false)}
-            className="inline-flex h-10 w-10 items-center justify-center border-2 border-white text-white transition-colors duration-150 hover:border-[#FFD447] hover:bg-[#FFD447] hover:text-[#111111] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow"
+            className="inline-flex h-10 w-10 items-center justify-center border-2 border-white text-white shadow-none transition-[transform,background-color,color,border-color] duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:border-[#FFD447] hover:bg-[#FFD447] hover:text-[#111111] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[2px] active:translate-y-[2px]"
           >
             <X aria-hidden="true" size={22} strokeWidth={3} />
           </button>

@@ -119,7 +119,7 @@ export default function Hero({ profile, skills = [] }: HeroProps) {
           ) : null}
         </div>
 
-        <div className="relative z-10 order-2 mx-auto hidden w-full max-w-[360px] sm:block lg:max-w-none">
+        <div className="relative z-10 order-2 mx-auto hidden w-full max-w-[360px] sm:block md:translate-y-5 lg:max-w-none lg:translate-y-8">
           <Card variant="yellow" className="relative p-3 md:p-4 lg:p-5">
             <div className="absolute -right-2 -top-2 hidden h-10 w-10 border-2 border-nb-border bg-nb-pink sm:block md:-right-4 md:-top-4 md:h-12 md:w-12" />
             <div className="absolute -bottom-2 -left-2 hidden h-10 w-10 border-2 border-nb-border bg-nb-blue sm:block md:-bottom-4 md:-left-4 md:h-12 md:w-12" />

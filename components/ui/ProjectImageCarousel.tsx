@@ -104,7 +104,7 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
             type="button"
             aria-label="Previous image"
             onClick={prev}
-            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:left-3 sm:h-10 sm:w-10"
+            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:left-3 sm:h-10 sm:w-10"
           >
             &lt;
           </button>
@@ -113,7 +113,7 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
             type="button"
             aria-label="Next image"
             onClick={next}
-            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:right-3 sm:h-10 sm:w-10"
+            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:right-3 sm:h-10 sm:w-10"
           >
             &gt;
           </button>

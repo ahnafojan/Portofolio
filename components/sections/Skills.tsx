@@ -82,14 +82,14 @@ const chipBgMap: Record<SkillColor, string> = {
 };
 
 const activeColorMap: Record<string, string> = {
-  all: "bg-[#111] text-[#FFD447] shadow-[3px_3px_0_#FFD447]",
-  tools: "bg-[#FFD447] text-[#111] shadow-[3px_3px_0_#111]",
-  frontend: "bg-[#6BCB77] text-[#111] shadow-[3px_3px_0_#111]",
-  backend: "bg-[#FF6B9A] text-[#111] shadow-[3px_3px_0_#111]",
-  fullstack: "bg-[#111] text-[#FFD447] shadow-[3px_3px_0_#FFD447]",
-  database: "bg-[#4D96FF] text-white shadow-[3px_3px_0_#111]",
-  devops: "bg-white text-[#111] border-[#111] shadow-[3px_3px_0_#111]",
-  other: "bg-[#F8F4E3] text-[#111] shadow-[3px_3px_0_#111]",
+  all: "bg-[#111] text-[#FFD447] shadow-[3px_3px_0_#FFD447] hover:shadow-none active:shadow-none",
+  tools: "bg-[#FFD447] text-[#111] shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
+  frontend: "bg-[#6BCB77] text-[#111] shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
+  backend: "bg-[#FF6B9A] text-[#111] shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
+  fullstack: "bg-[#111] text-[#FFD447] shadow-[3px_3px_0_#FFD447] hover:shadow-none active:shadow-none",
+  database: "bg-[#4D96FF] text-white shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
+  devops: "bg-white text-[#111] border-[#111] shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
+  other: "bg-[#F8F4E3] text-[#111] shadow-[3px_3px_0_#111] hover:shadow-none active:shadow-none",
 };
 
 function normalizeCategoryId(category?: string) {
@@ -190,10 +190,10 @@ export default function Skills({ skills }: SkillsProps) {
                   setOpenDesc(null);
                 }}
                 className={cn(
-                  "inline-flex min-h-10 items-center gap-2 border-2 border-[#111] px-3 py-1.5 font-mono text-xs font-black uppercase transition-[transform,box-shadow,background-color,color] duration-150",
+                  "inline-flex min-h-10 items-center gap-2 border-2 border-[#111] px-3 py-1.5 font-mono text-xs font-black uppercase transition-[transform,box-shadow,background-color,color] duration-150 hover:translate-x-[3px] hover:translate-y-[3px] active:translate-x-[3px] active:translate-y-[3px]",
                   active
                     ? getFilterActiveClass(category.id)
-                    : "bg-white text-[#111] shadow-[2px_2px_0_#111] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#111]",
+                    : "bg-white text-[#111] shadow-[2px_2px_0_#111] hover:shadow-none active:shadow-none",
                 )}
               >
                 <span>{category.label}</span>
