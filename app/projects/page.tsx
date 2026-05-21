@@ -32,7 +32,7 @@ export default async function ProjectsPage() {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
 
-      <div className="nb-container pt-24 pb-12 md:py-16">
+      <div className="nb-container pt-28 pb-12 md:pt-32 md:pb-16">
         <Card variant="yellow" className="relative overflow-hidden">
           <div className="absolute right-5 top-5 hidden h-12 w-12 border-2 border-nb-border bg-nb-pink sm:block" />
 

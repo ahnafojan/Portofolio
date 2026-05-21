@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity";
 import { SanityImage } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface ProjectImageCarouselProps {
   images: SanityImage[];
@@ -27,6 +29,11 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
   const hasMultiple = images.length > 1;
   const ratios = useMemo(() => images.map((image) => getImageAspectRatio(image)), [images]);
   const activeRatio = ratios[activeIndex] ?? 16 / 9;
+  const activeIsPortrait = activeRatio < 1;
+  const frameStyle = {
+    "--project-image-ratio": activeRatio.toString(),
+    transform: `translateX(-${activeIndex * 100}%)`,
+  } as CSSProperties;
 
   const prev = () => {
     setActiveIndex((current) => (current - 1 + images.length) % images.length);
@@ -38,8 +45,10 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
 
   return (
     <div
-      className="relative w-full overflow-hidden bg-nb-surface"
-      style={{ aspectRatio: activeRatio }}
+      className={cn(
+        "relative w-full overflow-hidden bg-nb-surface",
+        activeIsPortrait && "mx-auto max-w-[560px] lg:max-w-[640px]",
+      )}
       onTouchStart={(event) => {
         touchStartX.current = event.touches[0]?.clientX ?? null;
       }}
@@ -57,25 +66,36 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
       }}
     >
       <div
-        className="flex h-full max-h-[70svh] min-h-[220px] w-full transition-transform duration-150 ease-out sm:min-h-[320px] lg:max-h-[760px]"
-        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+        className={cn(
+          "flex w-full transition-transform duration-150 ease-out",
+          activeIsPortrait
+            ? "h-[72svh] min-h-[480px] max-h-[760px] sm:min-h-[560px]"
+            : "min-h-[270px] sm:min-h-[360px]",
+          "lg:h-auto lg:min-h-0 lg:max-h-none lg:[aspect-ratio:var(--project-image-ratio)]",
+        )}
+        style={frameStyle}
       >
-        {images.map((image, index) => (
-          <div
-            key={image.asset?._ref ?? `${title}-${index}`}
-            className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-2 sm:p-3"
-          >
-            <Image
-              src={urlFor(image).auto("format").fit("max").width(1800).url()}
-              alt={`${title} preview ${index + 1}`}
-              width={1600}
-              height={900}
-              loading="lazy"
-              className="h-full w-full object-contain"
-              sizes="(max-width: 768px) 100vw, 1200px"
-            />
-          </div>
-        ))}
+        {images.map((image, index) => {
+          const imageRatio = ratios[index] ?? 16 / 9;
+          const imageIsPortrait = imageRatio < 1;
+
+          return (
+            <div
+              key={image.asset?._ref ?? `${title}-${index}`}
+              className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-1 sm:p-3"
+            >
+              <Image
+                src={urlFor(image).auto("format").fit("max").width(imageIsPortrait ? 1100 : 1800).url()}
+                alt={`${title} preview ${index + 1}`}
+                width={imageIsPortrait ? 900 : 1600}
+                height={imageIsPortrait ? 1600 : 900}
+                loading="lazy"
+                className="h-full w-full object-contain"
+                sizes={imageIsPortrait ? "(max-width: 768px) 92vw, 560px" : "(max-width: 768px) 100vw, 1200px"}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {hasMultiple ? (

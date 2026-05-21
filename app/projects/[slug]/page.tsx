@@ -76,20 +76,20 @@ export default async function ProjectDetailPage({ params }: Params) {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
 
-      <div className="nb-container pt-24 pb-12 md:py-16">
-        <Card variant="yellow" className="relative overflow-hidden">
+      <div className="nb-container pt-24 pb-10 md:py-16">
+        <Card variant="yellow" className="relative overflow-hidden p-5 sm:p-6">
           <div className="absolute right-5 top-5 hidden h-12 w-12 border-2 border-nb-border bg-nb-pink sm:block" />
 
-          <Button href="/projects" variant="secondary" size="sm" className="mb-8 max-w-[calc(100%-3rem)]">
+          <Button href="/projects" variant="secondary" size="sm" className="mb-6 max-w-[calc(100%-3rem)] sm:mb-8">
             &lt; All projects
           </Button>
 
-          <div className="mb-5 flex flex-wrap items-center gap-2.5">
+          <div className="mb-4 flex flex-wrap items-center gap-2.5 sm:mb-5">
             <SectionLabel className="mb-0">Case Study</SectionLabel>
             {project.featured ? <Badge variant="dark">Featured project</Badge> : null}
           </div>
 
-          <h1 className="nb-h1 break-words font-heading font-black leading-tight text-nb-text">
+          <h1 className="break-words font-heading text-[clamp(2rem,10vw,5rem)] font-black leading-[0.95] text-nb-text">
             {project.title}
           </h1>
           <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-nb-muted lg:text-base">{summary}</p>
@@ -104,21 +104,21 @@ export default async function ProjectDetailPage({ params }: Params) {
             </Badge>
           </div>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {project.demoUrl ? (
-              <Button href={project.demoUrl} target="_blank" rel="noopener noreferrer" variant="primary">
+              <Button href={project.demoUrl} target="_blank" rel="noopener noreferrer" variant="primary" className="w-full sm:w-auto">
                 Live Demo -&gt;
               </Button>
             ) : null}
             {project.repoUrl ? (
-              <Button href={project.repoUrl} target="_blank" rel="noopener noreferrer" variant="secondary">
+              <Button href={project.repoUrl} target="_blank" rel="noopener noreferrer" variant="secondary" className="w-full sm:w-auto">
                 GitHub Repo -&gt;
               </Button>
             ) : null}
           </div>
         </Card>
 
-        <section className="mt-8">
+        <section className="mt-8 -mx-3 sm:mx-0">
           {galleryImages.length > 0 ? (
             <Card className="overflow-hidden p-0">
               <ProjectImageCarousel images={galleryImages} title={project.title} />

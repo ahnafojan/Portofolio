@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import Button from "@/components/ui/Button";
 import useScrollDirection from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: "about", label: "About", href: "#about", sectionId: "about" },
-  { id: "projects", label: "Projects", href: "/projects" },
+  { id: "projects", label: "Projects", href: "#projects", sectionId: "projects" },
   { id: "skills", label: "Skills", href: "#skills", sectionId: "skills" },
   { id: "experience", label: "Experience", href: "#experience", sectionId: "experience" },
   { id: "organizations", label: "Organizations", href: "#organizations", sectionId: "organizations" },
@@ -33,6 +33,7 @@ export default function Navbar() {
     setOpen(false);
   }, []);
   const { scrollDir, isAtTop } = useScrollDirection(closeMenuOnScrollDown);
+  const brandClass = isAtTop ? "text-[#111111]" : "text-[#FFD447]";
   const contactButtonClass = isAtTop
     ? "border-2 border-[#111111] bg-transparent text-[#111111] shadow-none hover:shadow-[3px_3px_0_#111111]"
     : "border-2 border-[#111111] bg-[#FFD447] text-[#111111] shadow-[3px_3px_0_#111111] hover:shadow-[5px_5px_0_#111111]";
@@ -79,15 +80,31 @@ export default function Navbar() {
     [isHomePage],
   );
 
-  const handleNavClick = useCallback((id: string) => {
-    setActiveId(id);
-    setOpen(false);
+  const scrollToHash = useCallback((hash: string) => {
+    const section = document.getElementById(hash.slice(1));
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", hash);
   }, []);
+
+  const handleNavClick = useCallback(
+    (id: string, href: string, event?: MouseEvent<HTMLAnchorElement>) => {
+      setActiveId(id);
+      setOpen(false);
+
+      if (!href.startsWith("#") || !isHomePage) return;
+
+      event?.preventDefault();
+      window.requestAnimationFrame(() => scrollToHash(href));
+    },
+    [isHomePage, scrollToHash],
+  );
 
   const desktopNavLinks = useMemo(
     () =>
       NAV_ITEMS.map((item) => {
-        const active = isHomePage ? activeId === item.id : item.href.startsWith("/") && pathname.startsWith(item.href);
+        const active = isHomePage ? activeId === item.id : false;
         const linkColor = isAtTop ? "text-[#111111]" : "text-white";
         const className = cn(
           linkColor,
@@ -101,8 +118,8 @@ export default function Navbar() {
             <Link
               key={item.id}
               href={href}
-              onClick={() => handleNavClick(item.id)}
-              className={`font-bold transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
+              onClick={() => handleNavClick(item.id, item.href)}
+              className={`font-bold transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
             >
               {item.label}
             </Link>
@@ -113,20 +130,20 @@ export default function Navbar() {
           <a
             key={item.id}
             href={href}
-            onClick={() => handleNavClick(item.id)}
-            className={`font-bold transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
+            onClick={(event) => handleNavClick(item.id, item.href, event)}
+            className={`font-bold transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
           >
             {item.label}
           </a>
         );
       }),
-    [activeId, getNavHref, handleNavClick, isAtTop, isHomePage, pathname],
+    [activeId, getNavHref, handleNavClick, isAtTop, isHomePage],
   );
 
   const mobileNavLinks = useMemo(
     () =>
       NAV_ITEMS.map((item) => {
-        const active = isHomePage ? activeId === item.id : item.href.startsWith("/") && pathname.startsWith(item.href);
+        const active = isHomePage ? activeId === item.id : false;
         const className = cn(
           "flex min-h-[56px] items-center border-b border-[#333333] py-4 text-2xl font-extrabold text-white hover:text-[#FFD447]",
           active && "text-[#FFD447]",
@@ -138,8 +155,8 @@ export default function Navbar() {
             <Link
               key={item.id}
               href={href}
-              onClick={() => handleNavClick(item.id)}
-              className={`transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
+              onClick={() => handleNavClick(item.id, item.href)}
+              className={`transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
             >
               {item.label}
             </Link>
@@ -150,14 +167,14 @@ export default function Navbar() {
           <a
             key={item.id}
             href={href}
-            onClick={() => handleNavClick(item.id)}
-            className={`transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
+            onClick={(event) => handleNavClick(item.id, item.href, event)}
+            className={`transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow ${className}`}
           >
             {item.label}
           </a>
         );
       }),
-    [activeId, getNavHref, handleNavClick, isHomePage, pathname],
+    [activeId, getNavHref, handleNavClick, isHomePage],
   );
 
   return (
@@ -173,24 +190,26 @@ export default function Navbar() {
       >
         <nav className="nb-container flex min-h-16 items-center justify-between gap-4 py-3 lg:py-4">
           <a
-            href={isHomePage ? "#home" : "/#home"}
-            className="shrink-0 font-heading text-xl font-black text-[#FFD447] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow"
-            onClick={() => setOpen(false)}
+            href={getNavHref("#home")}
+            className={cn(
+              "shrink-0 font-heading text-xl font-black transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow",
+              brandClass,
+            )}
+            onClick={(event) => handleNavClick("home", "#home", event)}
           >
             Hey, let&apos;s connect!
           </a>
-
           <div className="hidden min-w-0 items-center justify-center gap-4 text-sm lg:flex xl:gap-5 xl:text-base">
             {desktopNavLinks}
           </div>
 
           <div className="hidden lg:block">
             <Button
-              href={isHomePage ? "#contact" : "/#contact"}
+              href={getNavHref("#contact")}
               size="sm"
               variant="primary"
               className={contactButtonClass}
-              onClick={() => handleNavClick("contact")}
+              onClick={(event: MouseEvent<HTMLAnchorElement>) => handleNavClick("contact", "#contact", event)}
             >
               Contact
             </Button>
@@ -222,9 +241,9 @@ export default function Navbar() {
       >
         <div className="flex min-h-11 items-center justify-between gap-4">
           <a
-            href={isHomePage ? "#home" : "/#home"}
+            href={getNavHref("#home")}
             className="font-heading text-xl font-black text-[#FFD447] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-nb-yellow"
-            onClick={() => setOpen(false)}
+            onClick={(event) => handleNavClick("home", "#home", event)}
           >
             Portfolio
           </a>
@@ -243,12 +262,10 @@ export default function Navbar() {
 
         <div className="mt-auto mb-8">
           <Button
-            href={isHomePage ? "#contact" : "/#contact"}
+            href={getNavHref("#contact")}
             variant="primary"
             className={`min-h-[48px] w-full ${menuContactButtonClass}`}
-            onClick={() => {
-              handleNavClick("contact");
-            }}
+            onClick={(event: MouseEvent<HTMLAnchorElement>) => handleNavClick("contact", "#contact", event)}
           >
             Contact
           </Button>
