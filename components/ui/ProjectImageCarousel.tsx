@@ -57,21 +57,21 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
       }}
     >
       <div
-        className="flex h-full w-full transition-transform duration-150 ease-out"
+        className="flex h-full max-h-[70svh] min-h-[220px] w-full transition-transform duration-150 ease-out sm:min-h-[320px] lg:max-h-[760px]"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {images.map((image, index) => (
           <div
             key={image.asset?._ref ?? `${title}-${index}`}
-            className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface"
+            className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-2 sm:p-3"
           >
             <Image
-              src={urlFor(image).auto("format").fit("max").width(1600).height(900).url()}
+              src={urlFor(image).auto("format").fit("max").width(1800).url()}
               alt={`${title} preview ${index + 1}`}
               width={1600}
               height={900}
               loading="lazy"
-              className="h-full w-full object-contain p-2 sm:p-3"
+              className="h-full w-full object-contain"
               sizes="(max-width: 768px) 100vw, 1200px"
             />
           </div>
@@ -84,7 +84,7 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
             type="button"
             aria-label="Previous image"
             onClick={prev}
-            className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow"
+            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:left-3 sm:h-10 sm:w-10"
           >
             &lt;
           </button>
@@ -93,7 +93,7 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
             type="button"
             aria-label="Next image"
             onClick={next}
-            className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow"
+            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:right-3 sm:h-10 sm:w-10"
           >
             &gt;
           </button>

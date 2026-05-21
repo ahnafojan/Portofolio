@@ -10,7 +10,8 @@ interface ProjectsProps {
 export default function Projects({ projects }: ProjectsProps) {
   if (!projects || projects.length === 0) return null;
 
-  const [featuredProject, ...restProjects] = projects;
+  const displayedProjects = projects.slice(0, 4);
+  const [featuredProject, ...restProjects] = displayedProjects;
 
   return (
     <section id="projects" className="scroll-mt-24 bg-nb-bg py-12 lg:py-20">

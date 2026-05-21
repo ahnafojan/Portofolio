@@ -5,6 +5,10 @@ export const profileQuery = `*[_type == "profile"][0]{
   about,
   location,
   avatar,
+  aboutAvatar,
+  heroFocusLabel,
+  heroFocusValue,
+  heroSkillCountLabel,
   socials
 }`;
 
@@ -64,6 +68,7 @@ export const experiencesQuery = `*[_type == "experience"] | order(order desc, st
 export const skillsQuery = `*[_type == "skill"] | order(order desc){
   _id,
   name,
+  description,
   category,
   level,
   order

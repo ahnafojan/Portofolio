@@ -11,9 +11,37 @@ export default defineType({
     defineField({ name: "location", title: "Location", type: "string" }),
     defineField({
       name: "avatar",
-      title: "Avatar",
+      title: "Hero Avatar",
       type: "image",
       options: { hotspot: true },
+      description: "Gambar yang dipakai di section Hero.",
+    }),
+    defineField({
+      name: "aboutAvatar",
+      title: "About Avatar",
+      type: "image",
+      options: { hotspot: true },
+      description: "Gambar khusus section About. Jika kosong, akan memakai Hero Avatar.",
+    }),
+    defineField({
+      name: "heroFocusLabel",
+      title: "Hero Focus Label",
+      type: "string",
+      initialValue: "Focus Area",
+      description: "Label kecil di card hero. Contoh: Focus Area, Main Stack, Current Focus.",
+    }),
+    defineField({
+      name: "heroFocusValue",
+      title: "Hero Focus Value",
+      type: "string",
+      description: "Teks besar di bawah label focus. Jika kosong, akan memakai skill dengan level/order tertinggi.",
+    }),
+    defineField({
+      name: "heroSkillCountLabel",
+      title: "Hero Skill Count Label",
+      type: "string",
+      initialValue: "Skills",
+      description: "Label kecil untuk jumlah skill di card hero.",
     }),
     defineField({
       name: "socials",

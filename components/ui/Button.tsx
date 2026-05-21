@@ -70,8 +70,9 @@ export default function Button(props: ButtonProps) {
     void _size;
     void _className;
     const isExternal = href.startsWith("http") || href.startsWith("mailto:");
+    const isHashLink = href.startsWith("#");
 
-    if (isExternal) {
+    if (isExternal || isHashLink) {
       return (
         <a className={classNames(variant, size, className)} href={href} {...linkProps}>
           {children}

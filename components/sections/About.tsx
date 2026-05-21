@@ -18,8 +18,9 @@ export default function About({ profile, skills = [] }: AboutProps) {
     "I design and build web experiences that feel fast, clear, and memorable.";
   const paragraphs = aboutText.split(/\n+/).filter(Boolean).slice(0, 4);
   const socialCount = Object.values(profile?.socials ?? {}).filter(Boolean).length;
-  const avatarUrl = profile?.avatar
-    ? urlFor(profile.avatar).auto("format").fit("crop").width(640).height(720).url()
+  const aboutAvatar = profile?.aboutAvatar ?? profile?.avatar;
+  const avatarUrl = aboutAvatar
+    ? urlFor(aboutAvatar).auto("format").fit("crop").width(640).height(720).url()
     : null;
 
   return (

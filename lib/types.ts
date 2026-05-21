@@ -19,6 +19,10 @@ export interface Profile {
   about?: string;
   location?: string;
   avatar?: SanityImage;
+  aboutAvatar?: SanityImage;
+  heroFocusLabel?: string;
+  heroFocusValue?: string;
+  heroSkillCountLabel?: string;
   socials?: {
     github?: string;
     linkedin?: string;
@@ -55,6 +59,7 @@ export interface Experience {
 export interface Skill {
   _id: string;
   name: string;
+  description?: string;
   category?: string;
   level?: number;
   order?: number;

@@ -6,7 +6,6 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import ProjectCard from "@/components/ui/ProjectCard";
-import SectionLabel from "@/components/ui/SectionLabel";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -33,15 +32,14 @@ export default async function ProjectsPage() {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
 
-      <div className="nb-container py-12 md:py-16">
+      <div className="nb-container pt-24 pb-12 md:py-16">
         <Card variant="yellow" className="relative overflow-hidden">
-          <div className="absolute right-5 top-5 h-12 w-12 border-2 border-nb-border bg-nb-pink" />
+          <div className="absolute right-5 top-5 hidden h-12 w-12 border-2 border-nb-border bg-nb-pink sm:block" />
 
-          <Button href="/" variant="secondary" size="sm" className="mb-8">
+          <Button href="/" variant="secondary" size="sm" className="mb-8 max-w-[calc(100%-3rem)]">
             &lt; Back home
           </Button>
 
-          <SectionLabel>Work</SectionLabel>
           <h1 className="nb-h1 break-words font-heading font-black leading-tight text-nb-text">All Projects</h1>
           <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-nb-muted lg:text-base">
             Kumpulan project yang pernah saya kerjakan, dengan fokus pada pengalaman pengguna, performa, dan kualitas

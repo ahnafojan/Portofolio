@@ -76,11 +76,11 @@ export default async function ProjectDetailPage({ params }: Params) {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
 
-      <div className="nb-container py-12 md:py-16">
+      <div className="nb-container pt-24 pb-12 md:py-16">
         <Card variant="yellow" className="relative overflow-hidden">
-          <div className="absolute right-5 top-5 h-12 w-12 border-2 border-nb-border bg-nb-pink" />
+          <div className="absolute right-5 top-5 hidden h-12 w-12 border-2 border-nb-border bg-nb-pink sm:block" />
 
-          <Button href="/projects" variant="secondary" size="sm" className="mb-8">
+          <Button href="/projects" variant="secondary" size="sm" className="mb-8 max-w-[calc(100%-3rem)]">
             &lt; All projects
           </Button>
 
