@@ -183,6 +183,77 @@ video {
     font-size: clamp(18px, 3vw, 24px);
   }
 
+  .gooey-loader-filter {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .gooey-loader {
+    --gooey-loader-border: #111111;
+    --gooey-loader-primary: #FF4D4D;
+    --gooey-loader-secondary: #4D96FF;
+    width: 12em;
+    height: 3em;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 8px solid var(--gooey-loader-border);
+    filter: url("#gooey-loader-filter");
+  }
+
+  .gooey-loader::before,
+  .gooey-loader::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .gooey-loader::before {
+    width: 22em;
+    height: 18em;
+    left: -2em;
+    bottom: -18em;
+    background: var(--gooey-loader-primary);
+    animation: gooey-loader-wave-one 2s linear infinite;
+  }
+
+  .gooey-loader::after {
+    width: 16em;
+    height: 12em;
+    left: -4em;
+    bottom: -12em;
+    background: var(--gooey-loader-secondary);
+    animation: gooey-loader-wave-two 2s linear infinite 0.75s;
+  }
+
+  @keyframes gooey-loader-wave-one {
+    0% {
+      transform: translateX(-10em) rotate(0deg);
+    }
+
+    100% {
+      transform: translateX(7em) rotate(180deg);
+    }
+  }
+
+  @keyframes gooey-loader-wave-two {
+    0% {
+      transform: translateX(-8em) rotate(0deg);
+    }
+
+    100% {
+      transform: translateX(8em) rotate(180deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gooey-loader::before,
+    .gooey-loader::after {
+      animation-duration: 6s;
+    }
+  }
+
   .chip-clickable {
     cursor: pointer;
     position: relative;
