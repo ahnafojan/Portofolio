@@ -2,10 +2,10 @@
 
 import { useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import Image from "next/image";
 import { urlFor } from "@/lib/sanity";
 import { SanityImage } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
 
 interface ProjectImageCarouselProps {
   images: SanityImage[];
@@ -82,9 +82,9 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
           return (
             <div
               key={image.asset?._ref ?? `${title}-${index}`}
-              className="flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-1 sm:p-3"
+              className="relative flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-1 sm:p-3"
             >
-              <Image
+              <ImageWithLoader
                 src={urlFor(image).auto("format").fit("max").width(imageIsPortrait ? 1100 : 1800).url()}
                 alt={`${title} preview ${index + 1}`}
                 width={imageIsPortrait ? 900 : 1600}

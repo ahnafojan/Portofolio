@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Project } from "@/lib/types";
 import { urlFor } from "@/lib/sanity";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
@@ -32,8 +32,9 @@ export default function ProjectCard({
   const imageDimensions = previewImage?.asset.metadata?.dimensions;
   const imageWidth = imageDimensions?.width ?? 960;
   const imageHeight = imageDimensions?.height ?? 540;
+  const shouldShowFullImage = showFullImage || featured;
   const imageSrc = previewImage
-    ? showFullImage
+    ? shouldShowFullImage
       ? urlFor(previewImage).auto("format").fit("max").width(1200).height(1200).url()
       : urlFor(previewImage).auto("format").fit("crop").width(960).height(540).url()
     : null;
@@ -47,11 +48,11 @@ export default function ProjectCard({
         horizontalOnMobile && "grid grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] gap-0 sm:flex",
       )}
       interactive
-      variant={project.highlightYellow ? "yellow" : "default"}
+      variant={featured && project.highlightYellow ? "yellow" : "default"}
     >
       <div
         className={cn(
-          "nb-border overflow-hidden bg-nb-surface",
+          "relative nb-border overflow-hidden bg-nb-surface",
           showFullImage && tileOnMobile
             ? "m-2 mb-0 flex aspect-[4/3] items-center justify-center sm:m-4 sm:mb-0 sm:aspect-video"
             : showFullImage
@@ -67,7 +68,7 @@ export default function ProjectCard({
         )}
       >
         {previewImage && imageSrc ? (
-          <Image
+          <ImageWithLoader
             src={imageSrc}
             alt={project.title}
             width={imageWidth}
@@ -75,17 +76,19 @@ export default function ProjectCard({
             priority={priority}
             loading={priority ? undefined : "lazy"}
             className={cn(
-              showFullImage
+              featured
+                ? "h-full w-full object-contain"
+                : showFullImage
                 ? tileOnMobile
                   ? "h-full w-full object-contain"
                   : "h-auto max-h-64 max-w-full object-contain sm:max-h-80"
                 : compactOnMobile
-                ? "h-full sm:aspect-video sm:h-auto"
+                ? "h-full w-full object-cover sm:aspect-video sm:h-auto"
                 : tileOnMobile
-                  ? "aspect-[4/3] sm:aspect-video"
+                  ? "aspect-[4/3] w-full object-cover sm:aspect-video"
                   : horizontalOnMobile
-                    ? "h-full aspect-[4/3] sm:aspect-video sm:h-auto"
-                    : "aspect-video",
+                    ? "h-full w-full object-cover sm:aspect-video sm:h-auto"
+                    : "aspect-video w-full object-cover",
             )}
             sizes={
               showFullImage
@@ -188,7 +191,7 @@ export default function ProjectCard({
 
         {isMobilePreview ? (
           <Button href={detailHref} size="sm" variant="secondary" className="mt-auto min-h-0 px-2 py-1 text-[11px] sm:hidden">
-            View project -&gt;
+            View project
           </Button>
         ) : null}
 

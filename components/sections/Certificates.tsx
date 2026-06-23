@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
 import SectionLabel from "@/components/ui/SectionLabel";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { urlFor } from "@/lib/sanity";
@@ -122,9 +122,9 @@ export default function Certificates({ items }: { items: Certificate[] }) {
                 const certificateSkill = certificate.skills?.[0];
                 const content = (
                   <>
-                    <div className="flex aspect-square items-center justify-center border-b-2 border-nb-border bg-nb-surface p-2.5 sm:p-4">
+                    <div className="relative flex aspect-square items-center justify-center border-b-2 border-nb-border bg-nb-surface p-2.5 sm:p-4">
                       {logo ? (
-                        <Image
+                        <ImageWithLoader
                           src={urlFor(logo).auto("format").fit("max").width(560).height(360).url()}
                           alt={`${certificate.title} logo`}
                           width={560}

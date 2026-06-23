@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
 import SectionLabel from "@/components/ui/SectionLabel";
 import HeroDescription from "@/components/sections/HeroDescription";
 import { urlFor } from "@/lib/sanity";
@@ -76,9 +76,9 @@ export default function Hero({ profile, skills = [] }: HeroProps) {
           <SectionLabel className="hero-enter hero-enter-label">About</SectionLabel>
 
           <div className="hero-enter hero-enter-profile mb-5 flex items-center gap-3 md:hidden">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden border-2 border-nb-border bg-nb-surface shadow-[3px_3px_0px_#111111]">
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden border-2 border-nb-border bg-nb-surface shadow-[3px_3px_0px_#111111]">
               {avatarUrl ? (
-                <Image
+                <ImageWithLoader
                   src={avatarUrl}
                   alt={fullName}
                   width={160}
@@ -157,9 +157,9 @@ export default function Hero({ profile, skills = [] }: HeroProps) {
             <div className="absolute -right-2 -top-2 hidden h-10 w-10 border-2 border-nb-border bg-nb-pink sm:block md:-right-4 md:-top-4 md:h-12 md:w-12" />
             <div className="absolute -bottom-2 -left-2 hidden h-10 w-10 border-2 border-nb-border bg-nb-blue sm:block md:-bottom-4 md:-left-4 md:h-12 md:w-12" />
 
-            <div className="nb-border bg-nb-surface p-2 sm:p-3">
+            <div className="relative nb-border bg-nb-surface p-2 sm:p-3">
               {avatarUrl ? (
-                <Image
+                <ImageWithLoader
                   src={avatarUrl}
                   alt={fullName}
                   width={720}
