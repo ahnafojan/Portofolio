@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { urlFor } from "@/lib/sanity";
 import { SanityImage } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -30,8 +31,10 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
   const ratios = useMemo(() => images.map((image) => getImageAspectRatio(image)), [images]);
   const activeRatio = ratios[activeIndex] ?? 16 / 9;
   const activeIsPortrait = activeRatio < 1;
-  const frameStyle = {
+  const screenStyle = {
     "--project-image-ratio": activeRatio.toString(),
+  } as CSSProperties;
+  const trackStyle = {
     transform: `translateX(-${activeIndex * 100}%)`,
   } as CSSProperties;
 
@@ -44,96 +47,116 @@ export default function ProjectImageCarousel({ images, title }: ProjectImageCaro
   };
 
   return (
-    <div
-      className={cn(
-        "relative w-full overflow-hidden bg-nb-surface",
-        activeIsPortrait && "mx-auto max-w-[560px] lg:max-w-[640px]",
-      )}
-      onTouchStart={(event) => {
-        touchStartX.current = event.touches[0]?.clientX ?? null;
-      }}
-      onTouchEnd={(event) => {
-        if (!hasMultiple || touchStartX.current === null) return;
-        const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
-        const delta = endX - touchStartX.current;
-        touchStartX.current = null;
-        if (Math.abs(delta) < 40) return;
-        if (delta < 0) next();
-        if (delta > 0) prev();
-      }}
-      onTouchCancel={() => {
-        touchStartX.current = null;
-      }}
-    >
+    <div className={cn("mx-auto w-full", activeIsPortrait ? "max-w-[360px] sm:max-w-[420px] lg:max-w-[300px]" : "max-w-[1080px]")}>
       <div
         className={cn(
-          "flex w-full transition-transform duration-150 ease-out",
+          "relative bg-nb-text",
           activeIsPortrait
-            ? "h-[72svh] min-h-[480px] max-h-[760px] sm:min-h-[560px]"
-            : "min-h-[270px] sm:min-h-[360px]",
-          "lg:h-auto lg:min-h-0 lg:max-h-none lg:[aspect-ratio:var(--project-image-ratio)]",
+            ? "rounded-[2rem] border-[7px] border-nb-border px-1.5 pb-3 pt-4 shadow-hard"
+            : "rounded-t-xl border-[7px] border-nb-border p-1.5 pt-3",
         )}
-        style={frameStyle}
       >
-        {images.map((image, index) => {
-          const imageRatio = ratios[index] ?? 16 / 9;
-          const imageIsPortrait = imageRatio < 1;
+        <span
+          aria-hidden="true"
+          className={cn(
+            "absolute left-1/2 z-20 -translate-x-1/2 bg-nb-surface",
+            activeIsPortrait ? "top-1.5 h-1 w-12 rounded-full" : "top-1 h-1.5 w-1.5 rounded-full",
+          )}
+        />
 
-          return (
-            <div
-              key={image.asset?._ref ?? `${title}-${index}`}
-              className="relative flex h-full w-full shrink-0 items-center justify-center bg-nb-surface p-1 sm:p-3"
-            >
-              <ImageWithLoader
-                src={urlFor(image).auto("format").fit("max").width(imageIsPortrait ? 1100 : 1800).url()}
-                alt={`${title} preview ${index + 1}`}
-                width={imageIsPortrait ? 900 : 1600}
-                height={imageIsPortrait ? 1600 : 900}
-                loading="lazy"
-                className="h-full w-full object-contain"
-                sizes={imageIsPortrait ? "(max-width: 768px) 92vw, 560px" : "(max-width: 768px) 100vw, 1200px"}
-              />
-            </div>
-          );
-        })}
+        <div
+          className={cn(
+            "relative w-full overflow-hidden bg-nb-text [aspect-ratio:var(--project-image-ratio)]",
+            activeIsPortrait ? "rounded-[1.45rem]" : "rounded-sm",
+          )}
+          style={screenStyle}
+          onTouchStart={(event) => {
+            touchStartX.current = event.touches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(event) => {
+            if (!hasMultiple || touchStartX.current === null) return;
+            const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+            const delta = endX - touchStartX.current;
+            touchStartX.current = null;
+            if (Math.abs(delta) < 40) return;
+            if (delta < 0) next();
+            if (delta > 0) prev();
+          }}
+          onTouchCancel={() => {
+            touchStartX.current = null;
+          }}
+        >
+          <div className="flex h-full w-full transition-transform duration-150 ease-out" style={trackStyle}>
+            {images.map((image, index) => {
+              const imageRatio = ratios[index] ?? 16 / 9;
+              const imageIsPortrait = imageRatio < 1;
+
+              return (
+                <div
+                  key={image.asset?._ref ?? `${title}-${index}`}
+                  className="relative flex h-full w-full shrink-0 items-center justify-center bg-nb-text"
+                >
+                  <ImageWithLoader
+                    src={urlFor(image).auto("format").fit("max").width(imageIsPortrait ? 1100 : 1800).url()}
+                    alt={`${title} preview ${index + 1}`}
+                    width={imageIsPortrait ? 900 : 1600}
+                    height={imageIsPortrait ? 1600 : 900}
+                    loading="lazy"
+                    className="block h-full w-full object-contain"
+                    loaderClassName="bg-nb-text/90"
+                    sizes={imageIsPortrait ? "(max-width: 768px) 82vw, 420px" : "(max-width: 768px) 92vw, 1080px"}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {hasMultiple ? (
+            <>
+              <button
+                type="button"
+                aria-label="Previous image"
+                onClick={prev}
+                className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:left-3 sm:h-10 sm:w-10"
+              >
+                <ChevronLeft aria-hidden="true" size={20} strokeWidth={3} />
+              </button>
+
+              <button
+                type="button"
+                aria-label="Next image"
+                onClick={next}
+                className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:right-3 sm:h-10 sm:w-10"
+              >
+                <ChevronRight aria-hidden="true" size={20} strokeWidth={3} />
+              </button>
+
+              <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
+                {images.map((_image, index) => (
+                  <button
+                    key={`${title}-image-dot-${index}`}
+                    type="button"
+                    aria-label={`Go to image ${index + 1}`}
+                    onClick={() => setActiveIndex(index)}
+                    className="h-3 border-2 border-nb-border bg-nb-surface transition-all duration-150"
+                    style={{
+                      width: activeIndex === index ? "24px" : "12px",
+                      background: activeIndex === index ? "#FFD447" : "#FFFFFF",
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+
+        {activeIsPortrait ? <span aria-hidden="true" className="absolute bottom-1.5 left-1/2 h-1 w-12 -translate-x-1/2 rounded-full bg-nb-surface" /> : null}
       </div>
 
-      {hasMultiple ? (
-        <>
-          <button
-            type="button"
-            aria-label="Previous image"
-            onClick={prev}
-            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:left-3 sm:h-10 sm:w-10"
-          >
-            &lt;
-          </button>
-
-          <button
-            type="button"
-            aria-label="Next image"
-            onClick={next}
-            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-nb-border bg-nb-yellow font-bold text-nb-text shadow-hard transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-[3px] hover:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow active:translate-x-[3px] active:shadow-none sm:right-3 sm:h-10 sm:w-10"
-          >
-            &gt;
-          </button>
-
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
-            {images.map((_image, index) => (
-              <button
-                key={`${title}-image-dot-${index}`}
-                type="button"
-                aria-label={`Go to image ${index + 1}`}
-                onClick={() => setActiveIndex(index)}
-                className="h-3 border-2 border-nb-border bg-nb-surface transition-all duration-150"
-                style={{
-                  width: activeIndex === index ? "24px" : "12px",
-                  background: activeIndex === index ? "#FFD447" : "#FFFFFF",
-                }}
-              />
-            ))}
-          </div>
-        </>
+      {!activeIsPortrait ? (
+        <div aria-hidden="true" className="relative -mt-px mx-auto h-4 w-[88%] border-2 border-t-0 border-nb-border bg-nb-text">
+          <span className="absolute left-1/2 top-0 h-1.5 w-24 -translate-x-1/2 border-x-2 border-b-2 border-nb-border bg-nb-surface" />
+        </div>
       ) : null}
     </div>
   );

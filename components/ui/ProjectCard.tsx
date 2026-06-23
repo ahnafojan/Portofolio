@@ -32,7 +32,7 @@ export default function ProjectCard({
   const imageDimensions = previewImage?.asset.metadata?.dimensions;
   const imageWidth = imageDimensions?.width ?? 960;
   const imageHeight = imageDimensions?.height ?? 540;
-  const shouldShowFullImage = showFullImage || featured;
+  const shouldShowFullImage = showFullImage || (featured && horizontalOnMobile);
   const imageSrc = previewImage
     ? shouldShowFullImage
       ? urlFor(previewImage).auto("format").fit("max").width(1200).height(1200).url()
@@ -76,7 +76,7 @@ export default function ProjectCard({
             priority={priority}
             loading={priority ? undefined : "lazy"}
             className={cn(
-              featured
+              featured && horizontalOnMobile
                 ? "h-full w-full object-contain"
                 : showFullImage
                 ? tileOnMobile

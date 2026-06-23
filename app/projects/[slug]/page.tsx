@@ -76,7 +76,7 @@ export default async function ProjectDetailPage({ params }: Params) {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
 
-      <div className="nb-container pt-24 pb-10 md:py-16">
+      <div className="nb-container pt-24 pb-10 md:pt-24 md:pb-16">
         <Card variant="yellow" className="relative overflow-hidden p-5 sm:p-6">
           <div className="absolute right-5 top-5 hidden h-12 w-12 border-2 border-nb-border bg-nb-pink sm:block" />
 
@@ -120,9 +120,7 @@ export default async function ProjectDetailPage({ params }: Params) {
 
         <section className="mt-8 -mx-3 sm:mx-0">
           {galleryImages.length > 0 ? (
-            <Card className="overflow-hidden p-0">
-              <ProjectImageCarousel images={galleryImages} title={project.title} />
-            </Card>
+            <ProjectImageCarousel images={galleryImages} title={project.title} />
           ) : (
             <Card className="py-16 text-center">
               <p className="font-mono text-sm font-bold text-nb-muted">No preview image available.</p>
