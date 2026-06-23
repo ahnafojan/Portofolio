@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import SectionLabel from "@/components/ui/SectionLabel";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 import { Skill } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,6 @@ type SkillCategory = {
   id: string;
   label: string;
   color: SkillColor;
-  wide?: boolean;
   skills: Skill[];
   description?: string;
 };
@@ -22,7 +22,7 @@ interface SkillsProps {
   skills: Skill[];
 }
 
-const categoryMeta: Record<string, Omit<SkillCategory, "skills" | "wide">> = {
+const categoryMeta: Record<string, Omit<SkillCategory, "skills">> = {
   tools: {
     id: "tools",
     label: "Tools",
@@ -114,26 +114,11 @@ function getFilterActiveClass(id: string) {
   return activeColorMap[id] ?? "bg-[#111] text-white";
 }
 
-const isSingleSkill = (cat: SkillCategory) => cat.skills.length === 1;
-
-const hasDesc = (skill: Skill) => Boolean(skill.description && skill.description.trim().length > 0);
-
-const isWide = (cat: SkillCategory) => cat.skills.length >= 5;
+const SKILL_PREVIEW_COUNT = 3;
 
 export default function Skills({ skills }: SkillsProps) {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [openDesc, setOpenDesc] = useState<string | null>(null);
-
-  useEffect(() => {
-    const handler = (event: MouseEvent) => {
-      const target = event.target instanceof HTMLElement ? event.target : null;
-      if (target?.closest("[data-skill-card='true']")) return;
-      setOpenDesc(null);
-    };
-
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, []);
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
 
   const categories = useMemo<SkillCategory[]>(() => {
     const grouped = skills.reduce<Record<string, { label: string; skills: Skill[] }>>((acc, skill) => {
@@ -150,7 +135,6 @@ export default function Skills({ skills }: SkillsProps) {
         const meta = getCategoryMeta(id, group.label);
         return {
           ...meta,
-          wide: group.skills.length >= 5,
           skills: group.skills,
         };
       })
@@ -161,14 +145,13 @@ export default function Skills({ skills }: SkillsProps) {
 
   const visibleCategories = activeFilter === "all" ? categories : categories.filter((category) => category.id === activeFilter);
 
-  function toggleDesc(catId: string, skillName: string) {
-    const key = `${catId}-${skillName}`;
-    setOpenDesc((current) => (current === key ? null : key));
+  function toggleCategory(categoryId: string) {
+    setExpandedCategoryId((current) => (current === categoryId ? null : categoryId));
   }
 
   return (
-    <section id="skills" className="scroll-mt-24 bg-nb-surface py-12 lg:py-20">
-      <div className="nb-container">
+    <section id="skills" className="scroll-mt-24 bg-nb-bg py-12 lg:py-20">
+      <ScrollReveal className="nb-container">
         <div className="mb-8 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <SectionLabel>Expertise</SectionLabel>
@@ -187,7 +170,7 @@ export default function Skills({ skills }: SkillsProps) {
                 type="button"
                 onClick={() => {
                   setActiveFilter(category.id);
-                  setOpenDesc(null);
+                  setExpandedCategoryId(null);
                 }}
                 className={cn(
                   "inline-flex min-h-10 items-center gap-2 border-2 border-[#111] px-3 py-1.5 font-mono text-xs font-black uppercase transition-[transform,box-shadow,background-color,color] duration-150 hover:translate-x-[3px] hover:translate-y-[3px] active:translate-x-[3px] active:translate-y-[3px]",
@@ -203,29 +186,27 @@ export default function Skills({ skills }: SkillsProps) {
           })}
         </div>
 
-        <div className="grid grid-cols-1 items-stretch gap-2.5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
+        <div className="reveal-stagger grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-3">
           {visibleCategories.map((category) => {
-            const singleSkill = isSingleSkill(category);
-            const singleSkillDescription = singleSkill && hasDesc(category.skills[0]) ? category.skills[0].description : null;
             const darkCard = category.color === "dark";
-            const wideCard = isWide(category) && activeFilter === "all";
+            const isExpanded = expandedCategoryId === category.id;
+            const visibleSkills = isExpanded ? category.skills : category.skills.slice(0, SKILL_PREVIEW_COUNT);
+            const hiddenSkillCount = category.skills.length - visibleSkills.length;
+            const skillsId = `skills-${category.id}`;
 
             return (
               <Card
                 key={category.id}
                 className={cn(
-                  "flex min-h-[140px] flex-col justify-start p-4 sm:min-h-[180px] sm:p-[18px] lg:px-6 lg:py-5",
+                  "flex min-w-0 self-start flex-col p-3 sm:min-h-[180px] sm:p-[18px] lg:px-6 lg:py-5",
                   cardColorMap[category.color] ?? cardColorMap.white,
-                  wideCard && "sm:col-span-2 lg:col-span-2",
                 )}
                 interactive
-                data-skill-card="true"
-                onClick={(event) => event.stopPropagation()}
               >
-                <div>
+                <div className="flex items-start justify-between gap-2">
                   <h3
                     className={cn(
-                      "font-mono text-xs font-black uppercase tracking-[0.24em]",
+                      "font-mono text-[9px] font-black uppercase tracking-[0.18em] sm:text-xs sm:tracking-[0.24em]",
                       darkCard ? "text-[#FFD447]" : "text-[#111111]/65",
                     )}
                   >
@@ -233,7 +214,7 @@ export default function Skills({ skills }: SkillsProps) {
                   </h3>
                   <p
                     className={cn(
-                      "mt-3 mb-2.5 font-heading text-[32px] font-black leading-none lg:text-[40px]",
+                      "font-heading text-2xl font-black leading-none sm:text-[32px] lg:text-[40px]",
                       darkCard ? "text-[#FFD447]" : "text-[#111111]",
                     )}
                   >
@@ -243,53 +224,56 @@ export default function Skills({ skills }: SkillsProps) {
 
                 <div
                   className={cn(
-                    "mb-3.5 h-0.5 w-full",
+                    "my-2.5 h-0.5 w-full sm:my-3.5",
                     darkCard ? "bg-[#FFD447] opacity-25" : "bg-[#111111] opacity-15",
                   )}
                 />
 
-                <div className="flex flex-wrap items-start gap-[5px] sm:gap-1.5">
-                  {category.skills.map((skill) => {
-                    const clickable = !singleSkill && hasDesc(skill);
-                    const key = `${category.id}-${skill.name}`;
-                    const isOpen = openDesc === key;
+                <div id={skillsId} className="flex flex-wrap items-start gap-1 sm:gap-1.5">
+                  {visibleSkills.map((skill) => (
+                    <span
+                      key={skill._id}
+                      title={skill.description}
+                      className={cn(
+                        "inline-flex min-h-6 max-w-full items-center border-2 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.03em] sm:min-h-7 sm:px-3 sm:py-[5px] sm:text-[11px]",
+                        chipBgMap[category.color] ?? chipBgMap.white,
+                      )}
+                    >
+                      <span className="min-w-0 break-words">{skill.name}</span>
+                    </span>
+                  ))}
 
-                    return (
-                      <div
-                        key={skill._id}
-                        className={cn("relative inline-block", isOpen && "z-[70]")}
-                        onClick={(event) => {
-                          if (!clickable) return;
-                          event.stopPropagation();
-                          toggleDesc(category.id, skill.name);
-                        }}
-                      >
-                        <span
-                          className={cn(
-                            "relative inline-flex min-h-7 max-w-full items-center border-2 px-3 py-[5px] font-mono text-[11px] font-bold uppercase tracking-[0.03em]",
-                            chipBgMap[category.color] ?? chipBgMap.white,
-                            clickable ? "chip-clickable" : "cursor-default",
-                            darkCard && clickable && "dark",
-                          )}
-                        >
-                          <span className="min-w-0 break-words">{skill.name}</span>
-                          {clickable ? <span className="chip-dot" aria-hidden="true" /> : null}
-                        </span>
-
-                        {clickable && isOpen ? (
-                          <div className="skill-popover" role="tooltip">
-                            {skill.description}
-                            <span className="popover-arrow" aria-hidden="true" />
-                          </div>
-                        ) : null}
-                      </div>
-                    );
-                  })}
+                  {hiddenSkillCount > 0 ? (
+                    <button
+                      type="button"
+                      aria-controls={skillsId}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleCategory(category.id)}
+                      className={cn(
+                        "inline-flex min-h-6 items-center border-2 border-dashed px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.03em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:min-h-7 sm:px-3 sm:py-[5px] sm:text-[11px]",
+                        darkCard ? "border-[#FFD447] text-[#FFD447] hover:bg-[#FFD447] hover:text-[#111111]" : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white",
+                      )}
+                    >
+                      +{hiddenSkillCount} tools
+                    </button>
+                  ) : isExpanded && category.skills.length > SKILL_PREVIEW_COUNT ? (
+                    <button
+                      type="button"
+                      aria-controls={skillsId}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleCategory(category.id)}
+                      className={cn(
+                        "inline-flex min-h-6 items-center border-2 border-dashed px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.03em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nb-yellow sm:min-h-7 sm:px-3 sm:py-[5px] sm:text-[11px]",
+                        darkCard ? "border-[#FFD447] text-[#FFD447] hover:bg-[#FFD447] hover:text-[#111111]" : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white",
+                      )}
+                    >
+                      Show less
+                    </button>
+                  ) : null}
                 </div>
 
-                {singleSkillDescription ? <p className="skill-inline-desc">{singleSkillDescription}</p> : null}
-                {category.description && !singleSkillDescription ? (
-                  <p className={cn("mt-4 text-sm leading-relaxed", darkCard ? "text-white/55" : "text-[#111111]/65")}>
+                {isExpanded && category.description ? (
+                  <p className={cn("mt-3 text-xs leading-relaxed sm:mt-4 sm:text-sm", darkCard ? "text-white/55" : "text-[#111111]/65")}>
                     {category.description}
                   </p>
                 ) : null}
@@ -297,7 +281,7 @@ export default function Skills({ skills }: SkillsProps) {
             );
           })}
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

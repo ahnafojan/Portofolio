@@ -5,24 +5,38 @@ export const profileQuery = `*[_type == "profile"][0]{
   about,
   location,
   avatar,
-  aboutAvatar,
   heroFocusLabel,
   heroFocusValue,
   heroSkillCountLabel,
   socials
 }`;
 
-export const featuredProjectsQuery = `*[_type == "project" && featured == true] | order(order desc) [0...4]{
+export const featuredProjectsQuery = `*[_type == "project" && featured == true] | order(order desc) [0...5]{
   _id,
   title,
   slug,
   summary,
-  thumbnails,
-  thumbnail,
+  thumbnails[]{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
+  thumbnail{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
   techStack,
   demoUrl,
   repoUrl,
   featured,
+  highlightYellow,
   order
 }`;
 
@@ -31,12 +45,27 @@ export const allProjectsQuery = `*[_type == "project"] | order(order desc, _crea
   title,
   slug,
   summary,
-  thumbnails,
-  thumbnail,
+  thumbnails[]{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
+  thumbnail{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
   techStack,
   demoUrl,
   repoUrl,
   featured,
+  highlightYellow,
   order
 }`;
 
@@ -45,12 +74,27 @@ export const projectBySlugQuery = `*[_type == "project" && slug.current == $slug
   title,
   slug,
   summary,
-  thumbnails,
-  thumbnail,
+  thumbnails[]{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
+  thumbnail{
+    ...,
+    asset->{
+      "_ref": _id,
+      "_type": "reference",
+      metadata { dimensions }
+    }
+  },
   techStack,
   demoUrl,
   repoUrl,
   featured,
+  highlightYellow,
   order
 }`;
 

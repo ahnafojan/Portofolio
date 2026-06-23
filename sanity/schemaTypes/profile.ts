@@ -17,13 +17,6 @@ export default defineType({
       description: "Gambar yang dipakai di section Hero.",
     }),
     defineField({
-      name: "aboutAvatar",
-      title: "About Avatar",
-      type: "image",
-      options: { hotspot: true },
-      description: "Gambar khusus section About. Jika kosong, akan memakai Hero Avatar.",
-    }),
-    defineField({
       name: "heroFocusLabel",
       title: "Hero Focus Label",
       type: "string",

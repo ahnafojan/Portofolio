@@ -42,6 +42,13 @@ export default defineType({
     defineField({ name: "demoUrl", title: "Demo URL", type: "url" }),
     defineField({ name: "repoUrl", title: "Repo URL", type: "url" }),
     defineField({ name: "featured", title: "Featured", type: "boolean", initialValue: false }),
+    defineField({
+      name: "highlightYellow",
+      title: "Highlight Card in Yellow",
+      description: "Aktifkan untuk menampilkan kartu project dengan latar kuning.",
+      type: "boolean",
+      initialValue: false,
+    }),
     defineField({ name: "order", title: "Order", type: "number", initialValue: 0 }),
   ],
   orderings: [

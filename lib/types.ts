@@ -3,6 +3,13 @@ export interface SanityImage {
   asset: {
     _ref: string;
     _type: "reference";
+    metadata?: {
+      dimensions?: {
+        width?: number;
+        height?: number;
+        aspectRatio?: number;
+      };
+    };
   };
   hotspot?: {
     x: number;
@@ -19,7 +26,6 @@ export interface Profile {
   about?: string;
   location?: string;
   avatar?: SanityImage;
-  aboutAvatar?: SanityImage;
   heroFocusLabel?: string;
   heroFocusValue?: string;
   heroSkillCountLabel?: string;
@@ -42,6 +48,7 @@ export interface Project {
   demoUrl?: string;
   repoUrl?: string;
   featured?: boolean;
+  highlightYellow?: boolean;
   order?: number;
 }
 

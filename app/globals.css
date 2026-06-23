@@ -328,6 +328,113 @@ video {
     }
   }
 
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px) rotate(0.35deg);
+    transition: opacity 380ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+  }
+
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > * {
+    animation: neo-snap-card 360ms cubic-bezier(0.2, 0.85, 0.25, 1) backwards;
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > :nth-child(2) {
+    animation-delay: 70ms;
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > :nth-child(3) {
+    animation-delay: 140ms;
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > :nth-child(4) {
+    animation-delay: 210ms;
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > :nth-child(5) {
+    animation-delay: 280ms;
+  }
+
+  .scroll-reveal.is-visible .reveal-stagger > :nth-child(n + 6) {
+    animation-delay: 350ms;
+  }
+
+  @keyframes neo-snap-card {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .hero-enter {
+    animation: neo-snap-up 440ms cubic-bezier(0.2, 0.85, 0.25, 1) backwards;
+  }
+
+  .hero-enter-label {
+    animation-delay: 20ms;
+  }
+
+  .hero-enter-status,
+  .hero-enter-profile {
+    animation-delay: 80ms;
+  }
+
+  .hero-enter-name {
+    animation-delay: 140ms;
+  }
+
+  .hero-enter-headline {
+    animation-delay: 200ms;
+  }
+
+  .hero-enter-description {
+    animation-delay: 260ms;
+  }
+
+  .hero-enter-actions {
+    animation-delay: 320ms;
+  }
+
+  .hero-enter-social {
+    animation-delay: 380ms;
+  }
+
+  .hero-enter-card {
+    animation: neo-snap-card 500ms cubic-bezier(0.2, 0.85, 0.25, 1) 220ms backwards;
+  }
+
+  @keyframes neo-snap-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px) rotate(-0.6deg);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal,
+    .hero-enter {
+      animation: none !important;
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
   @media (min-width: 640px) {
     .shadow-hard {
       box-shadow: 4px 4px 0px #111111;

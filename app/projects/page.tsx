@@ -68,9 +68,9 @@ export default async function ProjectsPage() {
             <p className="mt-2 text-sm text-nb-muted">Tambahkan project baru dari Sanity Studio di /studio.</p>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <ProjectCard key={project._id} project={project} priority={index < 3} />
+              <ProjectCard key={project._id} project={project} priority={index === 0} tileOnMobile showFullImage />
             ))}
           </div>
         )}

@@ -39,7 +39,6 @@ const loadingFallback = () => (
   </div>
 );
 
-const About = dynamic(() => import("@/components/sections/About"), { loading: loadingFallback });
 const Experience = dynamic(() => import("@/components/sections/Experience"), { loading: loadingFallback });
 const OrganizationSection = dynamic(() => import("@/components/sections/Organization"), { loading: loadingFallback });
 const Projects = dynamic(() => import("@/components/sections/Projects"), { loading: loadingFallback });
@@ -90,7 +89,6 @@ export default async function Home() {
     <main className="min-h-screen bg-nb-bg text-nb-text">
       <Navbar />
       {profile ? <Hero profile={profile} skills={skills ?? []} /> : null}
-      {profile ? <About profile={profile} skills={skills ?? []} /> : null}
       <Experience experiences={experiences ?? []} />
       <OrganizationSection items={organizations ?? []} />
       <Projects projects={featuredProjects ?? []} />

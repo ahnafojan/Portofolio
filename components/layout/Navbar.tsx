@@ -16,7 +16,6 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { id: "about", label: "About", href: "#about", sectionId: "about" },
   { id: "projects", label: "Projects", href: "#projects", sectionId: "projects" },
   { id: "skills", label: "Skills", href: "#skills", sectionId: "skills" },
   { id: "experience", label: "Experience", href: "#experience", sectionId: "experience" },
@@ -25,7 +24,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export default function Navbar() {
-  const [activeId, setActiveId] = useState("about");
+  const [activeId, setActiveId] = useState("home");
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
